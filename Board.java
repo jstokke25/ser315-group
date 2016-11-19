@@ -42,11 +42,11 @@ public class Board {
 			newSpace +=1;
 			System.out.println("Since "+(newSpace-1)+" is taken, "+toMove.name+" moves to space"+newSpace);
 		}
-		if ((oldSpace < 1 && newSpace >=1) || (oldSpace < 7 && newSpace >=7) || (oldSpace < 13 && newSpace >=13) || (oldSpace < 19 && newSpace >=19) || (oldSpace < 26 && newSpace >=26)){
+		if ((oldSpace < 2 && newSpace >=2) || (oldSpace < 7 && newSpace >=7) || (oldSpace < 13 && newSpace >=13) || (oldSpace < 19 && newSpace >=19) || (oldSpace < 26 && newSpace >=26)){
 			toMove.setPersonWorth(toMove.getSalary());
 			System.out.println(toMove.name+" passed Pay Day and recieved his salary of "+toMove.getSalary());
 		}
-		if ((oldSpace < 2 && newSpace >=2) || (oldSpace < 8 && newSpace >=8) || (oldSpace < 14 && newSpace >=14) || (oldSpace < 20 && newSpace >=20) || (oldSpace < 27 && newSpace >=27)){
+		if ((oldSpace < 3 && newSpace >=3) || (oldSpace < 8 && newSpace >=8) || (oldSpace < 14 && newSpace >=14) || (oldSpace < 20 && newSpace >=20) || (oldSpace < 27 && newSpace >=27)){
 			toMove.setPersonWorth((-.3*toMove.getSalary()));
 			System.out.println(toMove.name+" passed Tax Day and had to pay "+(.3*toMove.getSalary()));
 		}
