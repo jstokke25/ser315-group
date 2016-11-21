@@ -260,6 +260,7 @@ public class Board {
 			 playerString = scan.nextLine();
 			 players = Integer.parseInt(playerString);
 		 }*/
+		 Startup start = new Startup();
 		 System.out.println("Player one, your name is Player One.  If you would you like to change your name, type it here: ");
 		 p1Name = scan.nextLine();
 		 if (new String("").equals(p1Name)){
