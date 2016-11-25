@@ -1,3 +1,4 @@
+package src;
 
 public class Players {
 	public String name;
