@@ -69,7 +69,7 @@ public class Board {
 	 * Some optional choices, like adding investors or selling company.
 	 * Bankruptcy.
 	 */
-	 private void landedOn(Players toMove, Players other, int tile) {
+	 public void landedOn(Players toMove, Players other, int tile) {
 		Random rand = new Random();
 		Scanner scan = new Scanner(System.in);
 		switch(tile){
@@ -245,6 +245,8 @@ public class Board {
 	 * 2 player only.
 	 */
 	public static void main(String[] args) {
+		
+		
 		 String playerString, p1Name, p2Name, p1Comp="", p2Comp="";
 		 Integer players = 2;
 		 int p2Type = 0;
@@ -261,8 +263,8 @@ public class Board {
 			 playerString = scan.nextLine();
 			 players = Integer.parseInt(playerString);
 		 }*/
-		 Startup start = new Startup();
-		 System.out.println("Player one, your name is Player One.  If you would you like to change your name, type it here: ");
+		 
+		 System.out.println("Player two, your name is Player One.  If you would you like to change your name, type it here: ");
 		 p1Name = scan.nextLine();
 		 if (new String("").equals(p1Name)){
 			 p1Name = "Player One";

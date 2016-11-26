@@ -102,4 +102,11 @@ public class Players {
 				+"\nCurrently at tile "+getSpace()+ " of 30 spaces.");
 		System.out.println("*******************************************************");
 	}
+	public String toString(){
+		return getName()+" UPDATE *************************************\n" + 
+							"Owns "+(percentOwned*100)+"% of a(n) "+compType+"\nValued at $"+getCompEval()
+		+"\nPersonal Worth $ "+getPersonWorth()+" with a salary of $"+getSalary()
+		+"\nCurrently at tile "+getSpace()+ " of 30 spaces." 
+		+"*******************************************************";
+	}
 }

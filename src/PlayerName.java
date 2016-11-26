@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
  */
 public class PlayerName {
 
+
 	private JFrame frame;
 	private JTextField txtPlayer;
 	private JTextField txtPlayer_1;
@@ -99,5 +100,14 @@ public class PlayerName {
 		frame.getContentPane().add(chckbxComputer);
 		
 		frame.setVisible(true);
+	}
+	
+	
+	public JTextField getTxtPlayer() {
+		return txtPlayer;
+	}
+
+	public JTextField getTxtPlayer_1() {
+		return txtPlayer_1;
 	}
 }
