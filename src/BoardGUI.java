@@ -40,6 +40,7 @@ public class BoardGUI {
 	boolean firstSpin = true;
 	JTextPane lblOutput;
 	JTextPane txtHistory;
+	Players pTwo = null,pOne = null;
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -52,6 +53,8 @@ public class BoardGUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(21, -22, 1079, 554);
@@ -123,8 +126,6 @@ public class BoardGUI {
 		btnSpin.setBounds(298, 356, 75, 29);
 		btnSpin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				Players pTwo,pOne;
 				
 				if(firstSpin){
 					
@@ -230,47 +231,52 @@ public class BoardGUI {
 				}
 	/*			
 	 * This bit needs to be edited and rewritten to fit our board but it is pretty good so far.
-	 * 
+	 */			else{
+		 	//this else means it is not the initial spin.
 				Board game = new Board();
-				 if (pOne.getSpace() < 30 || pTwo.getSpace() < 30){
-					 if (pOne.getSpace() < 30){
+				 if (pOne.getSpace() < 18 || pTwo.getSpace() < 18){
+					 if (pOne.getSpace() < 18){
 						 if (pOne.isWait() == false){
-							 game.move(pOne,pTwo);
+							 game.move(pOne,pTwo, lblOutput, txtHistory);
 							 game.draw(pOne,pTwo);
 						 }
 						 else{
 							 pOne.setWait(false);
-							 System.out.println(pOne.name+" has to wait this round.  Press any key to continue to "+pTwo.name+"'s turn");
-							 String entry = scan.nextLine();
+							 lblOutput.setText(pOne.name+" has to wait this round.");
+							 txtHistory.setText("\n" + txtHistory.getText() + pOne.name+" has to wait this round."+"\n\n");
 						 }
 					}
 					else{
-						System.out.println(pOne.name+" has already finished. Press any key to continue to "+pTwo.name+"'s turn.");
-						String entry = scan.nextLine();
+						lblOutput.setText(pOne.name+" has already finished.");
+						 txtHistory.setText("\n" + txtHistory.getText() + pOne.name+" has already finished."+"\n\n");
 					}
-					if (pTwo.getSpace() < 30){
+					if (pTwo.getSpace() < 18){
 						 if (pTwo.isWait() == false){
-							 game.move(pTwo, pOne);
+							 game.move(pTwo, pOne, lblOutput, txtHistory);
 							 game.draw(pOne, pTwo);
 						 }
 						 else{
 							 pTwo.setWait(false);
-							 String entry = scan.nextLine();
 						 }
 					}
 					else{
-						System.out.println(pTwo.name+" has already finished. Press any key to continue to "+pOne.name+"'s turn.");
-						String entry = scan.nextLine();
+						lblOutput.setText(pTwo.name+" has already finished.");
+						txtHistory.setText("\n" + txtHistory.getText() + pTwo.name+" has already finished."+"\n\n");
 					}
+				 }else{
+				 if (pOne.getPersonWorth() > pTwo.getPersonWorth()){
+					 lblOutput.setText(pOne.name+" Wins!");
+					 txtHistory.setText("\n" + txtHistory.getText() + pOne.name+" Wins!"+"\n\n");
 				 }
-				 if (pOne.getPersonWorth() > pTwo.getPersonWorth())
-					 System.out.println(pOne.name+" Wins!");
-				 if (pOne.getPersonWorth() < pTwo.getPersonWorth())
-					 System.out.println(pTwo.name+" Wins!");
+				 if (pOne.getPersonWorth() < pTwo.getPersonWorth()){
+					 lblOutput.setText(pTwo.name+" Wins!");
+					 txtHistory.setText("\n" + txtHistory.getText() + pTwo.name+" Wins!" + "\n\n");
+				 }
 				 if (pOne.getPersonWorth() == pTwo.getPersonWorth())
-					 System.out.println("It's a Tie!");		
-				 
-			*/
+					 lblOutput.setText("It's a Tie!");	
+				 	txtHistory.setText("\n" + txtHistory.getText() + "It's a Tie!" + "\n\n");
+				 }
+	 			}
 			}
 		});
 		frame.getContentPane().add(btnSpin);

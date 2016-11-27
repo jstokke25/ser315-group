@@ -2,6 +2,9 @@ package src;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
+
 public class Board {
 	private final int finishLine = 30;
 	
@@ -29,38 +32,46 @@ public class Board {
 	 * the company value is doubled.
 	 * Otherwise starts switch case for spot landed on. 
 	 */
-	public void move(Players toMove, Players other){
+	public void move(Players toMove, Players other, JTextPane output, JTextPane history){
 		Board ckTiles = new Board();
 		Random rand = new Random();
-		Scanner scan = new Scanner(System.in);
 		int oldSpace = toMove.getSpace();
-		System.out.println(toMove.name+" push any key to spin");
-		String entry = scan.nextLine();
 		int move = rand.nextInt(5)+1;
 		int newSpace = move+oldSpace;
-		System.out.println(toMove.name+" spun a "+move+".");
+		output.setText(toMove.name+" spun a "+move+".");
+		history.setText("\n" + history.getText() + toMove.name+" spun a "+move+"." + "\n\n");
 		if (newSpace == other.getSpace()){
 			newSpace +=1;
-			System.out.println("Since "+(newSpace-1)+" is taken, "+toMove.name+" moves to space"+newSpace);
+			//System.out.println("Since "+(newSpace-1)+" is taken, "+toMove.name+" moves to space"+newSpace);
+			output.setText("Since "+(newSpace-1)+" is taken, "+toMove.name+" moves to space"+newSpace);
+			history.setText("\n" + history.getText() + "Since "+(newSpace-1)+" is taken, "+toMove.name+" moves to space"+newSpace + "\n\n");
 		}
 		if ((oldSpace < 2 && newSpace >=2) || (oldSpace < 7 && newSpace >=7) || (oldSpace < 13 && newSpace >=13) || (oldSpace < 19 && newSpace >=19) || (oldSpace < 26 && newSpace >=26)){
 			toMove.setPersonWorth(toMove.getSalary());
-			System.out.println(toMove.name+" passed Pay Day and recieved his salary of "+toMove.getSalary());
+			//System.out.println(toMove.name+" passed Pay Day and recieved his salary of "+toMove.getSalary());
+			output.setText(toMove.name+" passed Pay Day and recieved his salary of "+toMove.getSalary());
+			history.setText("\n" + history.getText() + toMove.name+" passed Pay Day and recieved his salary of "+toMove.getSalary() + "\n\n");
 		}
 		if ((oldSpace < 3 && newSpace >=3) || (oldSpace < 8 && newSpace >=8) || (oldSpace < 14 && newSpace >=14) || (oldSpace < 20 && newSpace >=20) || (oldSpace < 27 && newSpace >=27)){
 			toMove.setPersonWorth((-.3*toMove.getSalary()));
-			System.out.println(toMove.name+" passed Tax Day and had to pay "+(.3*toMove.getSalary()));
+			//System.out.println(toMove.name+" passed Tax Day and had to pay "+(.3*toMove.getSalary()));
+			output.setText(toMove.name+" passed Tax Day and had to pay "+(.3*toMove.getSalary()));
+			history.setText("\n" + history.getText() + toMove.name+" passed Tax Day and had to pay "+(.3*toMove.getSalary()) + "\n\n");
 		}
 		if (newSpace >= 30 && other.getSpace() < 30){
 			double newCompEval = (toMove.getCompEval()*2);
 			toMove.setCompEval(newCompEval);
 			toMove.setPersonWorth((newCompEval*toMove.getPercentOwned()));
 			toMove.setSalary(toMove.getPercentOwned(),toMove.getCompEval());
-			System.out.println(toMove.name+"'s company went public and the company is now worth $"+toMove.getCompEval());
+			//System.out.println(toMove.name+"'s company went public and the company is now worth $"+toMove.getCompEval());
+			output.setText(toMove.name+"'s company went public and the company is now worth $"+toMove.getCompEval());
+			history.setText("\n" + history.getText() + toMove.name+"'s company went public and the company is now worth $"+toMove.getCompEval() + "\n\n");
 		}
-		ckTiles.landedOn(toMove, other, newSpace);
+		ckTiles.landedOn(toMove, other, newSpace, output, history);
 		toMove.setSpace(newSpace);
-		toMove.print();		
+		output.setText(toMove.toString());
+		history.setText("\n" + history.getText() + toMove.toString() + "\n\n");
+		//toMove.print();		
 	}
 	/*
 	 * Cases include: paying services (potentially to other player).
@@ -69,9 +80,8 @@ public class Board {
 	 * Some optional choices, like adding investors or selling company.
 	 * Bankruptcy.
 	 */
-	 public void landedOn(Players toMove, Players other, int tile) {
+	 public void landedOn(Players toMove, Players other, int tile, JTextPane output, JTextPane history) {
 		Random rand = new Random();
-		Scanner scan = new Scanner(System.in);
 		switch(tile){
 		case 1: 
 			break;
@@ -80,24 +90,32 @@ public class Board {
 		case 3:
 			if (new String("Ride Sharing Company").equals(toMove.getCompType()))
 				break;
-			System.out.println(toMove.name+" has to pay Ride Sharing Company $15,000 from last convention.");
+			//System.out.println(toMove.name+" has to pay Ride Sharing Company $15,000 from last convention.");
+			output.setText(toMove.name+" has to pay Ride Sharing Company $15,000 from last convention.");
+			history.setText("\n" + history.getText() + toMove.name+" has to pay Ride Sharing Company $15,000 from last convention." + "\n\n");
 			toMove.setPersonWorth(-15000);
 			if (new String("Ride Sharing Company").equals(other.getCompType()))
 					other.setPersonWorth(15000);
 			break;
 		case 4:
-			System.out.println(toMove.name+"'s company received a good review on a tech website.  Value of company has increased by 25%");
+			//System.out.println(toMove.name+"'s company received a good review on a tech website.  Value of company has increased by 25%");
+			output.setText(toMove.name+"'s company received a good review on a tech website.  Value of company has increased by 25%");
+			history.setText("\n" + history.getText() + toMove.name+" has to pay Ride Sharing Company $15,000 from last convention." + "\n\n");
 			double newEval = (.25*toMove.getCompEval()+toMove.getCompEval());
 			toMove.setCompEval(newEval);
 			toMove.setPersonWorth(.25*toMove.getCompEval());
 			toMove.setSalary(toMove.getPercentOwned(), toMove.getCompEval());
 			break;
 		case 5:
-			System.out.println(toMove.name+" settled a lawsuite by paying the plaintiff $100,000");
+			//System.out.println(toMove.name+" settled a lawsuite by paying the plaintiff $100,000");
+			output.setText(toMove.name+" settled a lawsuite by paying the plaintiff $100,000");
+			history.setText("\n" + history.getText() + toMove.name+" has to pay Ride Sharing Company $15,000 from last convention." + "\n\n");
 			toMove.setPersonWorth(-100000);
 			break;
 		case 6:
-			System.out.println(toMove.name+" crowdfunding has increased your company's value by 15%");
+			//System.out.println(toMove.name+" crowdfunding has increased your company's value by 15%");
+			output.setText(toMove.name+" crowdfunding has increased your company's value by 15%");
+			history.setText("\n" + history.getText() + toMove.name+" has to pay Ride Sharing Company $15,000 from last convention." + "\n\n");
 			double newVal = (.15*toMove.getCompEval()+toMove.getCompEval());
 			toMove.setCompEval(newVal);
 			toMove.setPersonWorth(.15*toMove.getCompEval());
@@ -107,21 +125,36 @@ public class Board {
 		case 8:
 			break;
 		case 9:
-			System.out.println("Would you like to enter a contest for new businesses?\n"
+			/*System.out.println("Would you like to enter a contest for new businesses?\n"
+					+"The entry is $20000.  The winner gets $100000 and 2nd gets $25000\n"
+					+"Press y to enter or any other key to skip it");*/
+			output.setText("Would you like to enter a contest for new businesses?\n"
 					+"The entry is $20000.  The winner gets $100000 and 2nd gets $25000\n"
 					+"Press y to enter or any other key to skip it");
-			String entry = scan.nextLine();
-			if (new String("Y").equals(entry) || new String("y").equals(entry)){
+			history.setText("\n" + history.getText() + "Would you like to enter a contest for new businesses?\n"
+					+"The entry is $20000.  The winner gets $100000 and 2nd gets $25000\n"
+					+"Press y to enter or any other key to skip it" + "\n\n");
+			//String entry = scan.nextLine();
+			
+			int diag = JOptionPane.showConfirmDialog(null, "Would you like to enter a contest for new businesses?\n"
+					+"The entry is $20000.  The winner gets $100000 and 2nd gets $25000\n"
+					+"Press y to enter or any other key to skip it", "Decision", JOptionPane.YES_NO_OPTION);
+			
+			if (diag == JOptionPane.YES_OPTION){
 				toMove.setPersonWorth(-20000);
-				System.out.println("If you spin a 3 you win 1st place, 4 or 5 wins second.  Press any key to spin.");
-				String entry2 = scan.nextLine();
+				output.setText("If you spin a 3 you win 1st place, 4 or 5 wins second.");
+				history.setText("\n" + history.getText() + "If you spin a 3 you win 1st place, 4 or 5 wins second." + "\n\n");
 				int spin = rand.nextInt(5)+1;
 				if (spin == 3){
-					System.out.println(toMove+" won first place and $100000");
+					//System.out.println(toMove+" won first place and $100000");
+					output.setText(toMove+" won first place and $100000");
+					history.setText("\n" + history.getText() + toMove+" won first place and $100000" + "\n\n");
 					toMove.setPersonWorth(100000);
 				}
 				if (spin == 4 || spin == 5){
-					System.out.println(toMove.name+" won second place and $25000");
+					//System.out.println(toMove.name+" won second place and $25000");
+					output.setText(toMove.name+" won second place and $25000");
+					history.setText("\n" + history.getText() + toMove.name+" won second place and $25000" + "\n\n");
 					toMove.setPersonWorth(25000);
 				}
 			}
@@ -129,17 +162,23 @@ public class Board {
 		case 10:
 			if (new String("IT company").equals(toMove.getCompType()))
 				break;
-			System.out.println(toMove.name+" has to pay IT Company $30,000.");
+			//System.out.println(toMove.name+" has to pay IT Company $30,000.");
+			output.setText(toMove.name+" has to pay IT Company $30,000.");
+			history.setText("\n" + history.getText() + toMove.name+" has to pay IT Company $30,000." + "\n\n");
 			toMove.setPersonWorth(-30000);
 			if (new String("IT company").equals(other.getCompType()))
 					other.setPersonWorth(30000);
 			break;
 		case 11:
-			System.out.println("You had to hire another staff member at $40000");
+			//System.out.println("You had to hire another staff member at $40000");
+			output.setText("You had to hire another staff member at $40000");
+			history.setText("\n" + history.getText() + "You had to hire another staff member at $40000" + "\n\n");
 			toMove.setPersonWorth(-40000);
 			break;
 		case 12:
-			System.out.println("You're rich uncle gave you a gift of $30000 to help your company");
+			//System.out.println("You're rich uncle gave you a gift of $30000 to help your company");
+			output.setText("You're rich uncle gave you a gift of $30000 to help your company");
+			history.setText("\n" + history.getText() + "You're rich uncle gave you a gift of $30000 to help your company" + "\n\n");
 			toMove.setPersonWorth(30000);
 			break;
 		case 13:
@@ -147,10 +186,13 @@ public class Board {
 		case 14:
 			break;
 		case 15:
-			System.out.println("An angel investor has offered to buy 30% of the shares, but he promises to increase the company value by 40%.\n"
-					+"Press y to accept or any other key to decline");
-			String enter15 = scan.nextLine();
-			if (new String("Y").equals(enter15) || new String("y").equals(enter15)){
+			//System.out.println("An angel investor has offered to buy 30% of the shares, but he promises to increase the company value by 40%.\n"
+					//+"Press y to accept or any other key to decline");
+			output.setText("An angel investor has offered to buy 30% of the shares, but he promises to increase the company value by 40%.\n");
+			history.setText("\n" + history.getText() + "An angel investor has offered to buy 30% of the shares, but he promises to increase the company value by 40%.\n" + "\n\n");
+			diag = JOptionPane.showConfirmDialog(null, "An angel investor has offered to buy 30% of the shares, but he promises to increase the company value by 40%.\n","Decision", JOptionPane.YES_NO_OPTION);
+			
+			if (diag == JOptionPane.YES_OPTION){
 				double newPercent = (toMove.getPercentOwned()-.3);
 				toMove.setPercentOwned(newPercent);
 				double newCompVal = (.4*toMove.getCompEval()+toMove.getCompEval());
@@ -161,7 +203,9 @@ public class Board {
 		case 16:
 			if (new String("Social Media Company").equals(toMove.getCompType()))
 				break;
-			System.out.println(toMove.name+" pays Social Media Company $25,000 for advertising.");
+			//System.out.println(toMove.name+" pays Social Media Company $25,000 for advertising.");
+			output.setText(toMove.name+" pays Social Media Company $25,000 for advertising.");
+			history.setText("\n" + history.getText() + toMove.name+" pays Social Media Company $25,000 for advertising." + "\n\n");
 			toMove.setPersonWorth(-25000);
 			if (new String("Social Media Company").equals(other.getCompType()))
 					other.setPersonWorth(25000);
@@ -171,7 +215,9 @@ public class Board {
 		case 18:
 			if (new String("Compression Software Company").equals(toMove.getCompType()))
 				break;
-			System.out.println(toMove.name+" pays Compression Software Company $15,000 for work done.");
+			//System.out.println(toMove.name+" pays Compression Software Company $15,000 for work done.");
+			output.setText(toMove.name+" pays Compression Software Company $15,000 for work done.");
+			history.setText("\n" + history.getText() + toMove.name+" pays Compression Software Company $15,000 for work done." + "\n\n");
 			toMove.setPersonWorth(-15000);
 			if (new String("Compression Software Company").equals(other.getCompType()))
 					other.setPersonWorth(15000);
@@ -183,7 +229,9 @@ public class Board {
 		case 21:
 			if (new String("Job Search company").equals(toMove.getCompType()))
 				break;
-			System.out.println(toMove.name+" pays Job Search company $20,000 for finding employees.");
+			//System.out.println(toMove.name+" pays Job Search company $20,000 for finding employees.");
+			output.setText(toMove.name+" pays Job Search company $20,000 for finding employees.");
+			history.setText("\n" + history.getText() + toMove.name+" pays Job Search company $20,000 for finding employees." + "\n\n");
 			toMove.setPersonWorth(-20000);
 			if (new String("Job Search company").equals(other.getCompType()))
 					other.setPersonWorth(20000);
@@ -191,21 +239,27 @@ public class Board {
 		case 22:
 			break;
 		case 23:
-			System.out.println(toMove.name+"'s company had a bad review in a podcast.  Companies value drops 10%");
+			//System.out.println(toMove.name+"'s company had a bad review in a podcast.  Companies value drops 10%");
+			output.setText(toMove.name+"'s company had a bad review in a podcast.  Companies value drops 10%");
+			history.setText("\n" + history.getText() + toMove.name+"'s company had a bad review in a podcast.  Companies value drops 10%" + "\n\n");
 			double eval23 = (-.2*toMove.getCompEval()+toMove.getCompEval());
 			toMove.setCompEval(eval23);
 			toMove.setSalary(toMove.getPercentOwned(), toMove.getCompEval());
 			break;
 		case 24:
-			System.out.println(toMove.name+" gets a raise of $10000");
+			//System.out.println(toMove.name+" gets a raise of $10000");
+			output.setText(toMove.name+" gets a raise of $10000");
+			history.setText("\n" + history.getText() + toMove.name+" gets a raise of $10000" + "\n\n");
 			toMove.salary += 10000;
 			break;
 		case 25:
 			double eval25 = 1.75*toMove.getCompEval();
-			System.out.println(toMove.name+", would you like to sell your company for $"+eval25+"?");
-			System.out.println("Press y to sell or any other key to decline.");
-			String enter25 = scan.nextLine();
-			if (new String("Y").equals(enter25) || new String("y").equals(enter25)){
+			//System.out.println(toMove.name+", would you like to sell your company for $"+eval25+"?");
+			output.setText(toMove.name+", would you like to sell your company for $"+eval25+"?");
+			history.setText("\n" + history.getText() + toMove.name+", would you like to sell your company for $"+eval25+"?" + "\n\n");
+			//System.out.println("Press y to sell or any other key to decline.");
+			diag = JOptionPane.showConfirmDialog(null, "would you like to sell your company for $"+eval25+"?","Decision", JOptionPane.YES_NO_OPTION);
+			if (diag == JOptionPane.YES_OPTION){
 				toMove.setPersonWorth(eval25);
 				toMove.setPercentOwned(0);
 				toMove.setSalary(toMove.getPercentOwned(), toMove.getCompEval());
@@ -219,7 +273,9 @@ public class Board {
 		case 28:
 			break;
 		case 29:
-			System.out.println(toMove.name+"'s company went bankrupt.  You are now worth nothing");
+			//System.out.println(toMove.name+"'s company went bankrupt.  You are now worth nothing");
+			output.setText(toMove.name+"'s company went bankrupt.  You are now worth nothing");
+			history.setText("\n" + history.getText() + toMove.name+"'s company went bankrupt.  You are now worth nothing" + "\n\n");
 			toMove.setCompEval(0);
 			toMove.salary = 0;
 			toMove.setPersonWorth(0*toMove.getPersonWorth());
@@ -244,8 +300,12 @@ public class Board {
 	 * Originally planned on setting up Computer User, but won't finish that on this iteration.
 	 * 2 player only.
 	 */
+	 
+		//Command line only!
+		/*
 	public static void main(String[] args) {
 		
+	
 		
 		 String playerString, p1Name, p2Name, p1Comp="", p2Comp="";
 		 Integer players = 2;
@@ -262,7 +322,7 @@ public class Board {
 			 System.out.println("This is an invalid option.  Please enter 1 or 2 players.");
 			 playerString = scan.nextLine();
 			 players = Integer.parseInt(playerString);
-		 }*/
+		 }
 		 
 		 System.out.println("Player two, your name is Player One.  If you would you like to change your name, type it here: ");
 		 p1Name = scan.nextLine();
@@ -405,5 +465,5 @@ public class Board {
 			 System.out.println(pTwo.name+" Wins!");
 		 if (pOne.getPersonWorth() == pTwo.getPersonWorth())
 			 System.out.println("It's a Tie!");		
-		 }		 
+		 }		 */
 }
