@@ -1,25 +1,17 @@
 package src;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import sun.security.pkcs11.P11TlsKeyMaterialGenerator;
 
-import java.awt.GridBagConstraints;
 import javax.swing.ImageIcon;
-import java.awt.Insets;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.Random;
-import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
-import java.awt.Color;
 import java.awt.SystemColor;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 /**
